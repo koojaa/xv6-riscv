@@ -19,6 +19,7 @@ OBJS = \
   $K/syscall.o \
   $K/sysproc.o \
   $K/bio.o \
+  $K/prof.o \
   $K/fs.o \
   $K/log.o \
   $K/sleeplock.o \
@@ -54,7 +55,7 @@ LD = $(TOOLPREFIX)ld
 OBJCOPY = $(TOOLPREFIX)objcopy
 OBJDUMP = $(TOOLPREFIX)objdump
 
-CFLAGS = -Wall -Werror -O -fno-omit-frame-pointer -ggdb
+CFLAGS = -Wall -Werror -O -fno-omit-frame-pointer -ggdb -DSNU
 CFLAGS += -MD
 CFLAGS += -mcmodel=medany
 CFLAGS += -ffreestanding -fno-common -nostdlib -mno-relax
@@ -210,3 +211,14 @@ tar:
 	(cd /tmp; tar cf - xv6) | gzip >xv6-rev10.tar.gz  # the next one will be 10 (9/17)
 
 .PHONY: dist-test dist
+
+# SNU ----------------------------------------------------
+TARBALL = ../xv6-$(_PANUM)-$(_STUDENTID).tar.gz
+FILES = ./Makefile ./$K ./$U ./mkfs
+
+submit:
+	@make clean
+	@rm -f $(TARBALL)
+	@tar cvzf $(TARBALL) $(FILES)
+	@echo "Please submit $(TARBALL) file"
+#---------------------------------------------------------
